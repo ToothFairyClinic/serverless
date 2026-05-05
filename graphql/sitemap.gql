@@ -1,0 +1,10 @@
+query GetServicesForSitemap {
+  services {
+    id
+    updated_at
+  }
+  page_metadata {
+    page_route
+    updated_at
+  }
+}

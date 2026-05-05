@@ -8,7 +8,7 @@ import { hashPassword } from "../common/password";
 
 const invalidUserOrPassword = {
   statusCode: 404,
-  body: JSON.stringify({ massage: "User not found or password invalid" }),
+  body: JSON.stringify({ message: "User not found or password invalid" }),
 };
 
 export const handler: Handler = async (event, context) => {
