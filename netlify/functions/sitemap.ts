@@ -14,10 +14,13 @@ export const handler: Handler = async () => {
         // 1. Додаємо статичні сторінки (можна взяти з page_metadata)
         data.page_metadata.forEach((page) => {
             languages.forEach((lang) => {
-                const path = page.page_route === "/" ? "" : page.page_route;
+
+                const cleanPath = page.page_route.startsWith('/') ? page.page_route : `/${page.page_route}`;
+                const finalPath = cleanPath === '/' ? '' : cleanPath;
+
                 urls += `
   <url>
-    <loc>${BASE_URL}/${lang}${path}</loc>
+    <loc>${BASE_URL}/${lang}${finalPath}</loc>
     <lastmod>${new Date(page.updated_at).toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
