@@ -33,7 +33,7 @@ export const handler: Handler = async () => {
             languages.forEach((lang) => {
                 urls += `
   <url>
-    <loc>${BASE_URL}/${lang}/services/${service.id}</loc>
+    <loc>${BASE_URL}/${lang}/services/${lang === 'ua' ? service.slug : service.slug_en}</loc>
     <lastmod>${new Date(service.updated_at).toISOString().split('T')[0]}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

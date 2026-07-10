@@ -1,6 +1,8 @@
 query GetServicesForSitemap {
   services {
     id
+    slug
+    slug_en
     updated_at
   }
   page_metadata {
