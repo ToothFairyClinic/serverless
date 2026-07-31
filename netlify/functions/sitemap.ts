@@ -41,7 +41,6 @@ export const handler: Handler = async () => {
             languages.forEach((lang) => {
                 const currentSlug = lang === 'ua' ? service.slug : service.slug_en;
 
-                // Пропускаємо, якщо slug з якоїсь причини відсутній
                 if (!currentSlug) return;
 
                 urls += `
@@ -63,7 +62,7 @@ export const handler: Handler = async () => {
             statusCode: 200,
             headers: {
                 "Content-Type": "application/xml",
-                "Cache-Control": "public, max-age=0, must-revalidate" // Запобігає агресивному кешуванню sitemap
+                "Cache-Control": "public, max-age=0, must-revalidate"
             },
             body: sitemap,
         };
