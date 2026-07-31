@@ -5,16 +5,14 @@ const BASE_URL = "https://toothfairy.clinic";
 
 export const handler: Handler = async () => {
     try {
-
         const data = await api.GetServicesForSitemap();
 
         const languages = ["ua", "en"];
         let urls = "";
 
-        // 1. Додаємо статичні сторінки (можна взяти з page_metadata)
+        // 1. Статичні сторінки (page_metadata)
         data.page_metadata.forEach((page) => {
             languages.forEach((lang) => {
-
                 const cleanPath = page.page_route.startsWith('/') ? page.page_route : `/${page.page_route}`;
                 const finalPath = cleanPath === '/' ? '' : cleanPath;
 
@@ -28,12 +26,27 @@ export const handler: Handler = async () => {
             });
         });
 
-        // 2. Додаємо динамічні послуги
+        // 2. Динамічні послуги з фільтрацією гео-сторінок та nofollow
         data.services.forEach((service) => {
+            // Захисний фільтр на рівні JS
+            const isGeo = service.is_geo_page === true;
+            const isNoFollow = service.custom_robots?.toLowerCase().includes("nofollow");
+            const isNoIndex = service.custom_robots?.toLowerCase().includes("noindex");
+
+            // Якщо сторінка гео або закрита від роботів — пропускаємо генерацію URL
+            if (isGeo || isNoFollow || isNoIndex) {
+                return;
+            }
+
             languages.forEach((lang) => {
+                const currentSlug = lang === 'ua' ? service.slug : service.slug_en;
+
+                // Пропускаємо, якщо slug з якоїсь причини відсутній
+                if (!currentSlug) return;
+
                 urls += `
   <url>
-    <loc>${BASE_URL}/${lang}/services/${lang === 'ua' ? service.slug : service.slug_en}</loc>
+    <loc>${BASE_URL}/${lang}/services/${currentSlug}</loc>
     <lastmod>${new Date(service.updated_at).toISOString().split('T')[0]}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -48,11 +61,14 @@ export const handler: Handler = async () => {
 
         return {
             statusCode: 200,
-            headers: { "Content-Type": "application/xml" },
+            headers: {
+                "Content-Type": "application/xml",
+                "Cache-Control": "public, max-age=0, must-revalidate" // Запобігає агресивному кешуванню sitemap
+            },
             body: sitemap,
         };
     } catch (e) {
-        console.error(e);
+        console.error("Sitemap generation error:", e);
         return { statusCode: 500, body: "Error generating sitemap" };
     }
 };
