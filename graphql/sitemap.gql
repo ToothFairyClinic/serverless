@@ -1,4 +1,5 @@
 query GetServicesForSitemap {
+  # 1. Запит для послуг (виключає гео-сторінки та nofollow)
   services(
     where: {
       _and: [
@@ -14,6 +15,16 @@ query GetServicesForSitemap {
     custom_robots
     updated_at
   }
+
+  # 2. Новий запит для лікарів (додано для генерації /ua/doctors/slug та /en/doctors/slug)
+  personnel {
+    id
+    slug
+    slug_en
+    updated_at
+  }
+
+  # 3. Метадані для статичних сторінок (/contacts, /price-list тощо)
   page_metadata {
     page_route
     updated_at

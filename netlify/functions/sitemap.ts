@@ -28,12 +28,10 @@ export const handler: Handler = async () => {
 
         // 2. Динамічні послуги з фільтрацією гео-сторінок та nofollow
         data.services.forEach((service) => {
-            // Захисний фільтр на рівні JS
             const isGeo = service.is_geo_page === true;
             const isNoFollow = service.custom_robots?.toLowerCase().includes("nofollow");
             const isNoIndex = service.custom_robots?.toLowerCase().includes("noindex");
 
-            // Якщо сторінка гео або закрита від роботів — пропускаємо генерацію URL
             if (isGeo || isNoFollow || isNoIndex) {
                 return;
             }
@@ -47,6 +45,27 @@ export const handler: Handler = async () => {
   <url>
     <loc>${BASE_URL}/${lang}/services/${currentSlug}</loc>
     <lastmod>${new Date(service.updated_at).toISOString().split('T')[0]}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+            });
+        });
+
+        // 3. Динамічні сторінки лікарів
+        data.personnel.forEach((person) => {
+            languages.forEach((lang) => {
+                const currentSlug = lang === 'ua' ? person.slug : person.slug_en;
+
+                if (!currentSlug) return;
+
+                const lastmodDate = person.updated_at
+                    ? new Date(person.updated_at).toISOString().split('T')[0]
+                    : new Date().toISOString().split('T')[0];
+
+                urls += `
+  <url>
+    <loc>${BASE_URL}/${lang}/doctors/${currentSlug}</loc>
+    <lastmod>${lastmodDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`;
