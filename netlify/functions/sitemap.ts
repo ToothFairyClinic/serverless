@@ -10,7 +10,6 @@ export const handler: Handler = async () => {
         const languages = ["ua", "en"];
         let urls = "";
 
-        // 1. Статичні сторінки (page_metadata)
         data.page_metadata.forEach((page) => {
             languages.forEach((lang) => {
                 const cleanPath = page.page_route.startsWith('/') ? page.page_route : `/${page.page_route}`;
@@ -26,7 +25,6 @@ export const handler: Handler = async () => {
             });
         });
 
-        // 2. Динамічні послуги з фільтрацією гео-сторінок та nofollow
         data.services.forEach((service) => {
             const isGeo = service.is_geo_page === true;
             const isNoFollow = service.custom_robots?.toLowerCase().includes("nofollow");
@@ -51,7 +49,6 @@ export const handler: Handler = async () => {
             });
         });
 
-        // 3. Динамічні сторінки лікарів
         data.personnel.forEach((person) => {
             languages.forEach((lang) => {
                 const currentSlug = lang === 'ua' ? person.slug : person.slug_en;
