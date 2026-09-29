@@ -13,7 +13,8 @@ export const handler: Handler = async () => {
         data.page_metadata.forEach((page) => {
             languages.forEach((lang) => {
                 const cleanPath = page.page_route.startsWith('/') ? page.page_route : `/${page.page_route}`;
-                const finalPath = cleanPath === '/' ? '' : cleanPath;
+                const localized = cleanPath === '/doctors' && lang === 'ua' ? '/likari' : cleanPath;
+                const finalPath = localized === '/' ? '' : localized;
 
                 urls += `
   <url>
@@ -61,7 +62,7 @@ export const handler: Handler = async () => {
 
                 urls += `
   <url>
-    <loc>${BASE_URL}/${lang}/doctors/${currentSlug}</loc>
+    <loc>${BASE_URL}/${lang}/${lang === 'ua' ? 'likari' : 'doctors'}/${currentSlug}</loc>
     <lastmod>${lastmodDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
