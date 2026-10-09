@@ -27,11 +27,10 @@ export const handler: Handler = async () => {
         });
 
         data.services.forEach((service) => {
-            const isGeo = service.is_geo_page === true;
             const isNoFollow = service.custom_robots?.toLowerCase().includes("nofollow");
             const isNoIndex = service.custom_robots?.toLowerCase().includes("noindex");
 
-            if (isGeo || isNoFollow || isNoIndex) {
+            if (isNoFollow || isNoIndex) {
                 return;
             }
 

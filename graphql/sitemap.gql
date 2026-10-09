@@ -1,11 +1,8 @@
 query GetServicesForSitemap {
-  # 1. Запит для послуг (виключає гео-сторінки та nofollow)
+  # 1. Запит для послуг (виключає nofollow)
   services(
     where: {
-      _and: [
-        { _or: [{ is_geo_page: { _eq: false } }, { is_geo_page: { _is_null: true } }] }
-        { _or: [{ custom_robots: { _is_null: true } }, { custom_robots: { _nilike: "%nofollow%" } }] }
-      ]
+      _or: [{ custom_robots: { _is_null: true } }, { custom_robots: { _nilike: "%nofollow%" } }]
     }
   ) {
     id

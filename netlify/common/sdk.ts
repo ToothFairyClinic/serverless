@@ -5396,7 +5396,7 @@ export const InsertAdminDocument = gql`
 export const GetServicesForSitemapDocument = gql`
     query GetServicesForSitemap {
   services(
-    where: {_and: [{_or: [{is_geo_page: {_eq: false}}, {is_geo_page: {_is_null: true}}]}, {_or: [{custom_robots: {_is_null: true}}, {custom_robots: {_nilike: "%nofollow%"}}]}]}
+    where: {_or: [{custom_robots: {_is_null: true}}, {custom_robots: {_nilike: "%nofollow%"}}]}
   ) {
     id
     slug
