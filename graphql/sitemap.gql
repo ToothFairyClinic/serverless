@@ -26,4 +26,13 @@ query GetServicesForSitemap {
     page_route
     updated_at
   }
+
+  posts(where: { is_published: { _eq: true } }) {
+    id
+    slug
+    slug_en
+    custom_robots
+    published_at
+    updated_at
+  }
 }

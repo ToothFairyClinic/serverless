@@ -5360,7 +5360,7 @@ export type InsertAdminMutation = { __typename?: 'mutation_root', insert_admin_o
 export type GetServicesForSitemapQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetServicesForSitemapQuery = { __typename?: 'query_root', services: Array<{ __typename?: 'services', id: any, slug?: string | null, slug_en?: string | null, is_geo_page?: boolean | null, custom_robots?: string | null, updated_at?: any | null }>, personnel: Array<{ __typename?: 'personnel', id: any, slug?: string | null, slug_en?: string | null, updated_at?: any | null }>, page_metadata: Array<{ __typename?: 'page_metadata', page_route: string, updated_at?: any | null }> };
+export type GetServicesForSitemapQuery = { __typename?: 'query_root', services: Array<{ __typename?: 'services', id: any, slug?: string | null, slug_en?: string | null, is_geo_page?: boolean | null, custom_robots?: string | null, updated_at?: any | null }>, personnel: Array<{ __typename?: 'personnel', id: any, slug?: string | null, slug_en?: string | null, updated_at?: any | null }>, page_metadata: Array<{ __typename?: 'page_metadata', page_route: string, updated_at?: any | null }>, posts: Array<{ __typename?: 'posts', id: any, slug: string, slug_en?: string | null, custom_robots?: string | null, published_at?: any | null, updated_at: any }> };
 
 
 export const GetAdminByUsernameDocument = gql`
@@ -5413,6 +5413,14 @@ export const GetServicesForSitemapDocument = gql`
   }
   page_metadata {
     page_route
+    updated_at
+  }
+  posts(where: {is_published: {_eq: true}}) {
+    id
+    slug
+    slug_en
+    custom_robots
+    published_at
     updated_at
   }
 }

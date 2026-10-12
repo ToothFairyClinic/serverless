@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import { v2 as cloudinary } from "cloudinary";
 import { config } from "../core/config";
 import { getAdminFromHeaders } from "../common/getAdminFromHeaders";
@@ -28,7 +29,7 @@ const handler: Handler = async (event, context) => {
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000);
-  const publicId = `products-${timestamp}`;
+  const publicId = `products-${timestamp}-${randomBytes(4).toString("hex")}`;
 
   const signature = cloudinary.utils.api_sign_request(
     {

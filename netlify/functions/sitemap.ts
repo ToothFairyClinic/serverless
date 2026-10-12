@@ -69,6 +69,30 @@ export const handler: Handler = async () => {
             });
         });
 
+        data.posts.forEach((post) => {
+            const robots = post.custom_robots?.toLowerCase();
+            if (robots?.includes("nofollow") || robots?.includes("noindex")) {
+                return;
+            }
+
+            const lastmod = new Date(post.updated_at || post.published_at || Date.now())
+                .toISOString().split('T')[0];
+
+            languages.forEach((lang) => {
+                const currentSlug = lang === 'ua' ? post.slug : post.slug_en;
+
+                if (!currentSlug) return;
+
+                urls += `
+  <url>
+    <loc>${BASE_URL}/${lang}/blog/${currentSlug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+            });
+        });
+
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${urls}
