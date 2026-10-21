@@ -35,4 +35,11 @@ query GetServicesForSitemap {
     published_at
     updated_at
   }
+
+  our_works(where: { is_case_published: { _eq: true } }) {
+    id
+    slug
+    slug_en
+    updated_at
+  }
 }
